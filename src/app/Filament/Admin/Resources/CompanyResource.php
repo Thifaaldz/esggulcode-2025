@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CompanyResource extends Resource
 {
     protected static ?string $model = Company::class;
-
+    protected static ?string $navigationGroup = 'Manajemen Perusahaan';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

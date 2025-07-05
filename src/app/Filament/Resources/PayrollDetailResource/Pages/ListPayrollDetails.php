@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Admin\Resources\PayrollDetailResource\Pages;
+namespace App\Filament\Resources\PayrollDetailResource\Pages;
 
-use App\Filament\Admin\Resources\PayrollDetailResource;
+use App\Filament\Resources\PayrollDetailResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

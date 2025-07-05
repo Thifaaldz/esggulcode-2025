@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PayrollCategoryResource extends Resource
 {
     protected static ?string $model = PayrollCategory::class;
-
+    protected static ?string $navigationGroup = 'Keuangan';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

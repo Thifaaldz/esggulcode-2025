@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Admin\Resources\LeaveResource\Pages;
+namespace App\Filament\Resources\LeaveResource\Pages;
 
-use App\Filament\Admin\Resources\LeaveResource;
+use App\Filament\Resources\LeaveResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 

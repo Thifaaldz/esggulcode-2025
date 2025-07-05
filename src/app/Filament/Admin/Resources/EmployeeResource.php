@@ -21,6 +21,7 @@ use Filament\Tables\Actions\BulkActionGroup;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
+    protected static ?string $navigationGroup = 'Manajemen Karyawan';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

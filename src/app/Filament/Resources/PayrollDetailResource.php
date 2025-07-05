@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Admin\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Admin\Resources\PayrollDetailResource\Pages;
-use App\Filament\Admin\Resources\PayrollDetailResource\RelationManagers;
+use App\Filament\Resources\PayrollDetailResource\Pages;
+use App\Filament\Resources\PayrollDetailResource\RelationManagers;
 use App\Models\PayrollDetail;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,8 +16,13 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PayrollDetailResource extends Resource
 {
     protected static ?string $model = PayrollDetail::class;
-
+    protected static ?string $navigationGroup = 'Keuangan';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function canAccess(): bool
+    {
+        return true;
+    }
 
     public static function form(Form $form): Form
     {
@@ -91,4 +96,19 @@ class PayrollDetailResource extends Resource
             'edit' => Pages\EditPayrollDetail::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+{
+    $query = parent::getEloquentQuery();
+
+    // Jika user bukan admin, batasi akses berdasarkan relasi ke employee
+    if (auth()->user()?->hasRole('employee')) {
+        $employeeId = auth()->user()->employee?->id;
+
+        $query->where('employee_id', $employeeId);
+    }
+
+    return $query;
+}
+
 }
