@@ -4,7 +4,6 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\EmployeeResource\Pages;
 use App\Models\Employee;
-use App\Models\PayrollCategory;
 use App\Models\PayrollDetail;
 use App\Models\SalaryPeriod;
 use Carbon\Carbon;
@@ -15,14 +14,13 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\HtmlString;
+use Filament\Tables\Actions\BulkActionGroup;
 
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -72,62 +70,24 @@ Forms\Components\TextInput::make('password')
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                //generate salary action
+
+                // Generate payroll untuk 1 karyawan
                 Action::make('generate_payroll')
                     ->label('Generate Payroll')
                     ->icon('heroicon-o-calculator')
                     ->color('warning')
                     ->requiresConfirmation()
-                    // REVISED: Implemented full logic for single payroll generation
                     ->action(function (Employee $record) {
-                        $currentMonth = Carbon::now()->month;
-                        $currentYear = Carbon::now()->year;
+                        Artisan::call('payroll:generate', ['employeeId' => $record->id]);
 
-                        $salaryPeriod = SalaryPeriod::where('month', $currentMonth)->where('year', $currentYear)->first();
-
-                        if (!$salaryPeriod) {
-                            Notification::make()->title('Error')->body('Salary period for this month has not been created.')->danger()->send();
-                            return;
-                        }
-
-                        $existingPayroll = $record->payrollDetails()->where('salary_period_id', $salaryPeriod->id)->exists();
-
-                        if ($existingPayroll) {
-                            Notification::make()->title('Already Exists')->body('Payroll for this employee has already been generated.')->warning()->send();
-                            return;
-                        }
-
-                        try {
-                            DB::transaction(function () use ($record, $salaryPeriod) {
-                                $gajiPokokCategory = PayrollCategory::where('name', 'Gaji Pokok')->first();
-                                if ($gajiPokokCategory && $record->position) {
-                                    $record->payrollDetails()->create([
-                                        'salary_period_id' => $salaryPeriod->id,
-                                        'payroll_category_id' => $gajiPokokCategory->id,
-                                        'amount' => $record->position->basic_salary,
-                                    ]);
-                                }
-
-                                $tunjanganMakanCategory = PayrollCategory::where('name', 'Tunjangan Makan')->first();
-                                if ($tunjanganMakanCategory) {
-                                    $record->payrollDetails()->create([
-                                        'salary_period_id' => $salaryPeriod->id, 'payroll_category_id' => $tunjanganMakanCategory->id, 'amount' => 500000
-                                    ]);
-                                }
-
-                                $potonganBpjsCategory = PayrollCategory::where('name', 'Potongan BPJS Kesehatan')->first();
-                                if ($potonganBpjsCategory) {
-                                    $record->payrollDetails()->create([
-                                        'salary_period_id' => $salaryPeriod->id, 'payroll_category_id' => $potonganBpjsCategory->id, 'amount' => 150000
-                                    ]);
-                                }
-                            });
-                            Notification::make()->title('Success')->body('Payroll has been successfully generated for ' . $record->name)->success()->send();
-                        } catch (\Exception $e) {
-                            Notification::make()->title('Transaction Failed')->body('Could not generate payroll. Error: ' . $e->getMessage())->danger()->send();
-                        }
+                        Notification::make()
+                            ->title('Payroll Diproses')
+                            ->body("Payroll untuk {$record->nama} sedang diproses.")
+                            ->success()
+                            ->send();
                     }),
-                //view salary action
+
+                // Lihat gaji bersih
                 Action::make('view_salary')
                     ->label('Lihat Gaji Bersih')
                     ->icon('heroicon-o-currency-dollar')
@@ -138,7 +98,6 @@ Forms\Components\TextInput::make('password')
                     ->requiresConfirmation()
                     ->modalDescription(function (Employee $record) {
                         $now = now();
-
                         $salaryPeriod = SalaryPeriod::where('month', $now->month)
                             ->where('year', $now->year)
                             ->first();
@@ -167,8 +126,27 @@ Forms\Components\TextInput::make('password')
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+                BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+
+                    // Generate payroll untuk semua yang dipilih
+                    Action::make('generatePayrollAll')
+                        ->label('Generate Payroll (Semua)')
+                        ->icon('heroicon-o-calculator')
+                        ->color('warning')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $employee) {
+                                Artisan::call('payroll:generate', ['employeeId' => $employee->id]);
+                            }
+
+                            Notification::make()
+                                ->title('Payroll Sedang Diproses')
+                                ->body('Payroll semua karyawan telah dijadwalkan.')
+                                ->success()
+                                ->send();
+                        }),
+                    
                 ]),
             ]);
     }

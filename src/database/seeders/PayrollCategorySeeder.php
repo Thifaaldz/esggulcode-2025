@@ -13,7 +13,7 @@ class PayrollCategorySeeder extends Seeder
      */
     public function run(): void
     {
-            $categories = [
+        $categories = [
             // --- Pendapatan (Income) ---
             ['name' => 'Gaji Pokok', 'type' => 'pendapatan'],
             ['name' => 'Tunjangan Jabatan', 'type' => 'pendapatan'],
@@ -21,7 +21,8 @@ class PayrollCategorySeeder extends Seeder
             ['name' => 'Tunjangan Makan', 'type' => 'pendapatan'],
             ['name' => 'Uang Lembur', 'type' => 'pendapatan'],
             ['name' => 'Bonus Kinerja', 'type' => 'pendapatan'],
-
+            ['name' => 'Bonus Kehadiran', 'type' => 'pendapatan'], // ⬅️ Tambahan ini
+        
             // --- Potongan (Deductions) ---
             ['name' => 'Potongan BPJS Kesehatan', 'type' => 'potongan'],
             ['name' => 'Potongan BPJS Ketenagakerjaan', 'type' => 'potongan'],
@@ -29,6 +30,7 @@ class PayrollCategorySeeder extends Seeder
             ['name' => 'Potongan Keterlambatan', 'type' => 'potongan'],
             ['name' => 'Potongan Ketidakhadiran', 'type' => 'potongan'],
         ];
+        
 
         // Loop through the categories and use firstOrCreate.
         // This will check for a record with the same 'name' and 'type'.
