@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\CourseController;
+use App\Livewire\About;
+use App\Livewire\Course;
+use App\Livewire\HomePage;
+use App\Livewire\Pengajar;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -16,6 +21,12 @@ Livewire::setScriptRoute(function ($handle) {
 /*
 / END
 */
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+Route::get('/', HomePage::class)->name('home');
+Route::get('/about', About::class)->name('about');
+Route::get('/course', Course::class)->name('course');
+Route::get('/pengajar', Pengajar::class)->name('pengajar');
+Route::get('/courses', [CourseController::class, 'index']);
