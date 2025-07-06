@@ -11,6 +11,12 @@
                         <p class="text-muted">{{ $course->category }}</p>
                         <p class="text-primary">Rp{{ number_format($course->price, 0, ',', '.') }}</p>
                     </div>
+                    <a 
+                    href="{{ route('register.bootcamp', $course->id) }}"
+                    class="mt-3 inline-block bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                    Daftar
+                </a>
                 </div>
             </div>
         @endforeach

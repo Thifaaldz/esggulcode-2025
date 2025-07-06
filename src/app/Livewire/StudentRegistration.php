@@ -72,6 +72,7 @@ class StudentRegistration extends Component
 
     public function render()
     {
-        return view('livewire.student-registration');
+        return view('livewire.student-registration')->layout('components.layouts.app');
     }
+    
 }
