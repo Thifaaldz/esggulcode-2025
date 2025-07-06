@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\MidtransCallbackController;
 use App\Livewire\About;
@@ -63,3 +64,8 @@ Route::get('/test-wa', function () {
     }
 });
 
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/student/certificate', [CertificateController::class, 'print'])
+        ->name('student.certificate.download');
+});

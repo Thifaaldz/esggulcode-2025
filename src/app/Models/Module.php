@@ -21,4 +21,9 @@ class Module extends Model
     {
         return $this->belongsTo(EventCourse::class);
     }
+
+    public function assignments()
+{
+    return $this->hasMany(Assignments::class);
+}
 }

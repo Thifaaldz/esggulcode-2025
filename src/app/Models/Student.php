@@ -23,4 +23,9 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function modules()
+{
+    return $this->hasManyThrough(Module::class, EventCourse::class);
+}
+
 }
