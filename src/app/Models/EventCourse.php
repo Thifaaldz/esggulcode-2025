@@ -23,7 +23,11 @@ class EventCourse extends Model
         return $this->hasMany(Student::class);
     }
 
-
+    public function index()
+    {
+    $courses = EventCourse::all();
+    return view('courses', compact('courses'));
+}
 
 public function modules()
 {

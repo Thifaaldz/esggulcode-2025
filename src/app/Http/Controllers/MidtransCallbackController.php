@@ -51,11 +51,12 @@ class MidtransCallbackController extends Controller
                 $user = User::firstOrCreate(
                     ['email' => $email],
                     ['name' => $name, 'password' => Hash::make($defaultPassword)]
+                
                 );
+                $studentRole = Role::firstOrCreate(['name' => 'student']);
                 if (!$user->hasRole('student')) {
                     $user->assignRole($studentRole);
                 }
-
                 // Buat/Update student
                 Student::updateOrCreate(
                     ['user_id' => $user->id],

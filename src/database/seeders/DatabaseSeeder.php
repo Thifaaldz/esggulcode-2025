@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             PayrollCategorySeeder::class,
             PayrollDetailSeeder::class,
             EventCourseSeeder::class,
+            ModuleSeeder::class,
         ]);
     }
 }
