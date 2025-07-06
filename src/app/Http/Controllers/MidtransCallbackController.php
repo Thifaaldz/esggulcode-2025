@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client as TwilioClient;
 use Midtrans\Config;
 use Midtrans\Transaction;
+use Spatie\Permission\Models\Role;
 
 class MidtransCallbackController extends Controller
 {
@@ -51,6 +52,9 @@ class MidtransCallbackController extends Controller
                     ['email' => $email],
                     ['name' => $name, 'password' => Hash::make($defaultPassword)]
                 );
+                if (!$user->hasRole('student')) {
+                    $user->assignRole($studentRole);
+                }
 
                 // Buat/Update student
                 Student::updateOrCreate(

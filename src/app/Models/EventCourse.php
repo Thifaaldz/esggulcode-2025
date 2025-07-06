@@ -23,10 +23,11 @@ class EventCourse extends Model
         return $this->hasMany(Student::class);
     }
 
-    public function index()
+
+
+public function modules()
 {
-    $courses = EventCourse::all();
-    return view('courses', compact('courses'));
+    return $this->hasMany(Module::class);
 }
 
     // Jika kamu nanti punya model Registration terpisah, kamu bisa pakai ini:
