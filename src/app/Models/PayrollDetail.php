@@ -3,36 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PendingTransaction extends Model
+class PayrollDetail extends Model
 {
-    protected $table = 'pending_transactions';
-
-    protected $fillable = [
-        'order_id',
-        'name',
-        'email',
-        'phone',
-        'event_course_id',
-    ];
-
-    public $timestamps = false;
-
-    // Relasi ke EventCourse
-    public function eventCourse()
+    protected $table = 'payroll_details';
+    protected $guarded = ['id'];
+    public function employee(): BelongsTo
     {
-        return $this->belongsTo(EventCourse::class);
+        return $this->belongsTo(Employee::class);
     }
-
-    // Relasi ke User (jika kamu ingin menautkan user berdasarkan email atau ID nanti)
-    public function user()
+    public function salaryPeriod(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'email', 'email'); // atau 'user_id' jika kamu pakai user_id
+        return $this->belongsTo(SalaryPeriod::class);
     }
-
-    // Relasi ke Student (jika kamu ingin tracking calon student sebelum confirm)
-    public function student()
+    public function payrollCategory(): BelongsTo
     {
-        return $this->hasOne(Student::class, 'email', 'email'); // Sesuaikan jika kamu pakai user_id
+        return $this->belongsTo(PayrollCategory::class);
     }
 }

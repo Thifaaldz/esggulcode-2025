@@ -16,7 +16,7 @@ class ModuleSeeder extends Seeder
             for ($i = 1; $i <= 8; $i++) {
                 Module::create([
                     'event_course_id' => $eventCourse->id,
-                    'title' => "Pertemuan $i - Materi $i",
+                    'title' => "Pertemuan $i - Materi {$eventCourse->title}",
                     'meeting_number' => $i,
                     'video_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // dummy video
                     'created_at' => now(),

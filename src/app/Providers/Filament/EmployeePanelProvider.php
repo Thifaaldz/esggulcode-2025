@@ -5,8 +5,6 @@ namespace App\Providers\Filament;
 use App\Filament\Resources\AttendanceResource;
 use App\Filament\Resources\LeaveResource;
 use App\Filament\Resources\PayrollDetailResource;
-use App\Filament\Resources\PayrollDetailResource as ResourcesPayrollDetailResource;
-use App\Models\Attendance;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,7 +20,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
 
 class EmployeePanelProvider extends PanelProvider
 {
