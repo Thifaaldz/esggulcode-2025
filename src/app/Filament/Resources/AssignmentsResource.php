@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Admin\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Admin\Resources\AssignmentsResource\Pages;
-use App\Filament\Admin\Resources\AssignmentsResource\RelationManagers;
+use App\Filament\Resources\AssignmentsResource\Pages;
+use App\Filament\Resources\AssignmentsResource\RelationManagers;
 use App\Models\Assignments;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;

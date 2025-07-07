@@ -102,12 +102,21 @@ class AttendanceResource extends Resource
         return $query;
     }
 
-    public static function getPages(): array
-    {
-        return [
+  public static function getPages(): array
+{
+    $pages = [];
+
+    if (auth()->user()?->hasRole('employee')) {
+        $pages['create'] = Pages\CreateAttendance::route('/create');
+    } else {
+        $pages = [
             'index' => Pages\ListAttendances::route('/'),
             'create' => Pages\CreateAttendance::route('/create'),
             'edit' => Pages\EditAttendance::route('/{record}/edit'),
         ];
     }
+
+    return $pages;
 }
+
+    }

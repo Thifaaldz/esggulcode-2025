@@ -90,6 +90,12 @@ class PayrollDetailResource extends Resource
 
     public static function getPages(): array
     {
+        if (auth()->user()?->hasRole('employee')) {
+            return [
+                'index' => Pages\ListPayrollDetails::route('/'),
+            ];
+        }
+    
         return [
             'index' => Pages\ListPayrollDetails::route('/'),
             'create' => Pages\CreatePayrollDetail::route('/create'),

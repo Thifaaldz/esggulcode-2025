@@ -102,6 +102,12 @@ class LeaveResource extends Resource
 
     public static function getPages(): array
     {
+        if (auth()->user()?->hasRole('employee')) {
+            return [
+                'create' => Pages\CreateLeave::route('/create'),
+            ];
+        }
+    
         return [
             'index' => Pages\ListLeaves::route('/'),
             'create' => Pages\CreateLeave::route('/create'),

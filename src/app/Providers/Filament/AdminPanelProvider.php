@@ -2,8 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\AssignmentsResource;
+use App\Filament\Resources\AssignmentsSubmissionsResource;
 use App\Filament\Resources\AttendanceResource;
 use App\Filament\Resources\LeaveResource;
+use App\Filament\Resources\ModuleResource;
 use App\Filament\Resources\PayrollDetailResource;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
@@ -113,7 +116,10 @@ class AdminPanelProvider extends PanelProvider
                 config('filament-logger.activity_resource'),
                 PayrollDetailResource::class,
                 AttendanceResource::class,
+                ModuleResource::class,
                 LeaveResource::class,
+                AssignmentsResource::class,
+                AssignmentsSubmissionsResource::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->middleware([

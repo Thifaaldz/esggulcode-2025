@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\AssignmentsResource;
+use App\Filament\Resources\AssignmentsSubmissionsResource;
+use App\Filament\Resources\ModuleResource;
 use App\Filament\Resources\AttendanceResource;
 use App\Filament\Resources\LeaveResource;
 use App\Filament\Resources\PayrollDetailResource;
@@ -46,6 +49,9 @@ class EmployeePanelProvider extends PanelProvider
                 PayrollDetailResource::class,
                 AttendanceResource::class,
                 LeaveResource::class,
+                ModuleResource::class,
+                AssignmentsResource::class,
+                AssignmentsSubmissionsResource::class,
             ])
             ->middleware([
                 EncryptCookies::class,
