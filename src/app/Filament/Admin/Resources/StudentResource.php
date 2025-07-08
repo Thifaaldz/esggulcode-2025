@@ -18,6 +18,7 @@ class StudentResource extends Resource
     protected static ?string $model = Student::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Manajemen Kursus';
 
     public static function form(Form $form): Form
     {
@@ -31,7 +32,24 @@ class StudentResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('user.name')
+                ->label('Nama Peserta')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('eventCourse.title')
+                ->label('Kursus')
+                ->sortable()
+                ->searchable(),
+
+            Tables\Columns\TextColumn::make('phone')
+                ->label('WhatsApp'),
+
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Tanggal Daftar')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

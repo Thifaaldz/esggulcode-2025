@@ -40,14 +40,27 @@ class PositionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('division.id')
+                ->label('Divisi')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('name')
+                ->label('Nama Posisi')
+                ->sortable()
+                ->searchable(),
+            Tables\Columns\TextColumn::make('basic_salary')
+                ->label('Gaji Pokok')
+                ->money('IDR', true)
+                ->sortable(),
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+            Tables\Columns\TextColumn::make('updated_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+  
             ])
             ->filters([
                 //

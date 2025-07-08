@@ -22,8 +22,10 @@ class ModuleResource extends Resource
 {
     protected static ?string $model = Module::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    protected static ?string $navigationGroup = 'Manajemen Kursus';
+    
     public static function form(Form $form): Form
     {
         return $form

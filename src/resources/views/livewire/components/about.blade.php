@@ -18,7 +18,7 @@
             <li><i class="bi bi-check-circle"></i> <span>Sesi belajar langsung (offline & online), proyek nyata, dan praktik kerja.</span></li>
             <li><i class="bi bi-check-circle"></i> <span>Sertifikat digital otomatis, terverifikasi QR code dan siap digunakan untuk karier profesional.</span></li>
           </ul>
-          <a href="bootcamp.html" class="read-more"><span>Pelajari Selengkapnya</span><i class="bi bi-arrow-right"></i></a>
+          <a href="{{ route('course') }}" class="read-more"><span>Pelajari Selengkapnya</span><i class="bi bi-arrow-right"></i></a>
         </div>
   
       </div>

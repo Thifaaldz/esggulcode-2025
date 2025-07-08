@@ -13,9 +13,13 @@ class EventCourse extends Model
     protected $fillable = [
         'title',
         'description',
+        'file_path',
         'start_date',
         'end_date',
         'price',
+        'branch_id',
+        'category',
+        'image',
     ];
 
     public function students()
@@ -32,6 +36,11 @@ class EventCourse extends Model
 public function modules()
 {
     return $this->hasMany(Module::class);
+}
+
+public function branch()
+{
+    return $this->belongsTo(Branch::class);
 }
 
     // Jika kamu nanti punya model Registration terpisah, kamu bisa pakai ini:
