@@ -83,9 +83,6 @@
 
     <div class="event-name">"{{ $eventCourse->title }}"</div>
 
-    <div class="subtitle">
-        Telah menyelesaikan seluruh tugas dengan nilai minimal 80.
-    </div>
 
     <div class="footer">
         Diterbitkan oleh: <strong>{{ $companyName ?? 'PT. Pembelajaran Indonesia' }}</strong><br>
