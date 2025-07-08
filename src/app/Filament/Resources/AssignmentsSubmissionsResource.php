@@ -22,6 +22,12 @@ class AssignmentsSubmissionsResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Manajemen Kursus';
+    
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasAnyRole(['instructor', 'super_admin']);
+    }
+    
 
     public static function form(Form $form): Form
     {

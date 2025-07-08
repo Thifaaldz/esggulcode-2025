@@ -8,6 +8,7 @@ use App\Filament\Resources\ModuleResource;
 use App\Filament\Resources\AttendanceResource;
 use App\Filament\Resources\LeaveResource;
 use App\Filament\Resources\PayrollDetailResource;
+use App\Filament\Resources\StudentResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -52,6 +53,7 @@ class EmployeePanelProvider extends PanelProvider
                 ModuleResource::class,
                 AssignmentsResource::class,
                 AssignmentsSubmissionsResource::class,
+                StudentResource::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -8,6 +8,7 @@ use App\Filament\Resources\AttendanceResource;
 use App\Filament\Resources\LeaveResource;
 use App\Filament\Resources\ModuleResource;
 use App\Filament\Resources\PayrollDetailResource;
+use App\Filament\Resources\StudentResource;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -120,6 +121,7 @@ class AdminPanelProvider extends PanelProvider
                 LeaveResource::class,
                 AssignmentsResource::class,
                 AssignmentsSubmissionsResource::class,
+                StudentResource::class,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->middleware([

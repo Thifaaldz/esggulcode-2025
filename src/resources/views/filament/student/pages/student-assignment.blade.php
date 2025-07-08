@@ -19,6 +19,22 @@
                     </a>
                     ({{ $submission->created_at->format('d M Y H:i') }})
                 </div>
+
+                {{-- Menampilkan nilai jika sudah dinilai --}}
+                @if ($submission->grade !== null)
+                    <div class="mt-2 text-sm text-indigo-700">
+                        📊 <strong>Nilai:</strong> {{ $submission->grade }}
+                    </div>
+                    @if ($submission->comment)
+                        <div class="mt-1 text-sm text-gray-700 italic">
+                            💬 Komentar: "{{ $submission->comment }}"
+                        </div>
+                    @endif
+                @else
+                    <div class="mt-2 text-sm text-yellow-600">
+                        ⏳ Menunggu penilaian dari guru.
+                    </div>
+                @endif
             @endif
 
             <div class="mt-3">
@@ -34,21 +50,14 @@
         </div>
     @endforeach
 
-    @php
-    $canPrint = \App\Models\AssignmentsSubmissions::where('student_id', auth()->user()->student->id)
-        ->whereBetween('assignment_id', [1, 8])
-        ->pluck('grade');
-
-    $eligible = $canPrint->count() === 8 && $canPrint->every(fn ($grade) => $grade >= 80);
-@endphp
-@if ($this->hasPassedAllAssignments())
-    <div class="p-6 mt-6 border rounded bg-green-100 text-center">
-        <h2 class="text-xl font-bold text-green-700 mb-2">Selamat! 🎉</h2>
-        <p class="mb-4">Anda telah menyelesaikan seluruh tugas dengan nilai minimal 80.</p>
-        <x-filament::button tag="a" href="{{ route('student.certificate.download') }}" target="_blank">
-            🎓 Cetak Sertifikat
-        </x-filament::button>
-    </div>
-@endif
-
+    {{-- Cek kelulusan semua tugas --}}
+    @if ($this->hasPassedAllAssignments())
+        <div class="p-6 mt-6 border rounded bg-green-100 text-center">
+            <h2 class="text-xl font-bold text-green-700 mb-2">Selamat! 🎉</h2>
+            <p class="mb-4">Anda telah menyelesaikan seluruh tugas dengan nilai minimal 80.</p>
+            <x-filament::button tag="a" href="{{ route('student.certificate.download') }}" target="_blank">
+                🎓 Cetak Sertifikat
+            </x-filament::button>
+        </div>
+    @endif
 </x-filament::page>

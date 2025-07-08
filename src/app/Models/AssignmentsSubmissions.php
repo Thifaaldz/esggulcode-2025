@@ -13,8 +13,8 @@ class AssignmentsSubmissions extends Model
         'student_id',
         'file_path',
         'notes',
-        'grade', // ✅ ini harus ada
-        'comment', // ✅ ini juga
+        'grade', 
+        'comment', 
         'submitted_at',
     ];
 

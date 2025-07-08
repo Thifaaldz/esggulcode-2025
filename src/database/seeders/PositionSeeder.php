@@ -13,29 +13,14 @@ class PositionSeeder extends Seeder
      */
     public function run(): void
     {
-        Position::insert([
-            [
-                'division_id' => 1,
-                'name' => 'Manager',
-                'basic_salary' => 12000000.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'division_id' => 1,
-                'name' => 'Senior Staff',
-                'basic_salary' => 8000000.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'division_id' => 1,
-                'name' => 'Junior Staff',
-                'basic_salary' => 5000000.00,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        for ($i = 4; $i <= 30; $i++) {
+            Position::insert([
+                ['division_id' => $i, 'name' => 'Manager', 'basic_salary' => 12000000.00, 'created_at' => now(), 'updated_at' => now()],
+                ['division_id' => $i, 'name' => 'Senior Staff', 'basic_salary' => 8000000.00, 'created_at' => now(), 'updated_at' => now()],
+                ['division_id' => $i, 'name' => 'Junior Staff', 'basic_salary' => 5000000.00, 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+        
     
     }
 }

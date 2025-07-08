@@ -32,6 +32,49 @@ class DepartmentSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'company_id' => 1,
+                'nama' => 'Academic Affairs',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'nama' => 'Student Success',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'nama' => 'Product Development',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'nama' => 'Admissions',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'nama' => 'Finance',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'nama' => 'Partnerships & Career Services',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'company_id' => 1,
+                'nama' => 'Operations',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
+        
     }
 }

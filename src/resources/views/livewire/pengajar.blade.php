@@ -67,7 +67,7 @@
       </div><!-- End Page Title -->
 
     @include('livewire.components.header')
-    @include('livewire.components.trainers')
+    @livewire('trainers-index')
     @include('livewire.components.footer')
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

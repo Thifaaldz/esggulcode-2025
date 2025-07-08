@@ -16,4 +16,8 @@ class EditAssignmentsSubmissions extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+    protected function canEdit(): bool
+    {
+        return auth()->user()?->hasRole('instruktur');
+    }
 }

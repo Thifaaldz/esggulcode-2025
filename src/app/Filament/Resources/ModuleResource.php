@@ -25,7 +25,15 @@ class ModuleResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
     protected static ?string $navigationGroup = 'Manajemen Kursus';
+
     
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasAnyRole(['instructor', 'super_admin']);
+    }
+    
+    
+
     public static function form(Form $form): Form
     {
         return $form
