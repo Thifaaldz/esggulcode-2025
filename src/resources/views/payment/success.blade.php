@@ -9,8 +9,7 @@
 
     <div style="max-width: 600px; margin: auto; background: white; padding: 2rem; border-radius: 8px;">
         <h1 style="color: green;">Pembayaran Berhasil 🎉</h1>
-        <p>Cek WA Notification untuk melihat ID dan Password Untuk login</p>
-        <p>Klik tombol di bawah untuk Memasuki E-learning Management System</p>
+        <p>Klik tombol di bawah untuk menyelesaikan pendaftaran:</p>
 
         <form action="{{ url('/midtrans/manual-callback') }}" method="POST">
             @csrf

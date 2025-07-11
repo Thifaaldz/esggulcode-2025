@@ -60,6 +60,12 @@
       </div>
     </div>
   
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Hak Cipta</span> <strong class="px-1 sitename">Mentor</strong> <span>Seluruh Hak Dilindungi</span></p>
+      <div class="credits">
+        Dirancang oleh <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
   
   </footer>
   
