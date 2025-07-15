@@ -13,13 +13,21 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('event_course_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->string('ppt_path')->nullable();
-            $table->string('video_url')->nullable(); // e.g., YouTube / Vimeo / direct link
-            $table->integer('meeting_number'); // e.g., 1 to 8
-            $table->timestamps();
+            
+            // Relasi ke tabel event_courses
+            $table->foreignId('event_course_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            // Informasi modul
+            $table->integer('meeting_number'); // Nomor pertemuan ke-
+            $table->string('title'); // Judul modul
+            $table->text('description')->nullable(); // Deskripsi modul
+            $table->string('ppt_path')->nullable(); // Path file ppt (storage)
+            $table->string('video_url')->nullable(); // URL video (YouTube/Vimeo)
+            $table->dateTime('meeting_datetime')->nullable();
+
+            $table->timestamps(); // created_at & updated_at
         });
     }
 

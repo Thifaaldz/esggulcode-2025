@@ -3,44 +3,48 @@
 namespace Database\Seeders;
 
 use App\Models\Branch;
+use App\Models\Division;
 use App\Models\Employee;
 use App\Models\Position;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class EmployeeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-            // Role dasar dan tambahan
+        // Daftar role yang digunakan
         $roles = [
             'employee', 'manager', 'senior_staff', 'junior_staff',
             'instructor', 'content_team', 'tech_support', 'marketing', 'hr'
         ];
+
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
         }
 
-        // Branch & Position default
+        // Buat branch default
         $branch = Branch::firstOrCreate(['id' => 1], [
             'company_id' => 1,
             'nama' => 'Cabang Utama',
             'alamat' => 'Jl. Merdeka No.1',
         ]);
 
-        $position = Position::firstOrCreate(['id' => 1], [
-            'division_id' => 1,
-            'name' => 'Staff HRD',
-            'basic_salary' => 5000000,
-        ]);
+        // Mapping role ke nama divisi
+        $roleToDivision = [
+            'hr' => 'Recruitment',
+            'content_team' => 'Content & Copywriting',
+            'tech_support' => 'Software Support',
+            'marketing' => 'Digital Marketing',
+            'instructor' => 'Instructor Management',
+            'senior_staff' => 'Curriculum Development',
+            'junior_staff' => 'Training & Development',
+            'manager' => 'LMS Development',
+        ];
 
-        // Data Karyawan + role tambahan
+        // Data karyawan
         $employees = [
             ['name' => 'Jonathan Rey Irawan', 'role' => ['instructor']],
             ['name' => 'Muhammad Ghozy Akbar', 'role' => ['instructor']],
@@ -66,24 +70,47 @@ class EmployeeSeeder extends Seeder
         foreach ($employees as $index => $data) {
             $name = $data['name'];
             $email = strtolower(str_replace(' ', '.', $name)) . '@example.com';
+            $roles = $data['role'];
 
+            // Buat user
             $user = User::create([
                 'name' => $name,
                 'email' => $email,
                 'password' => Hash::make('password'),
             ]);
 
-            // Assign default role
+            // Assign semua role
             $user->assignRole('employee');
-
-            // Assign role tambahan jika ada
-            foreach ($data['role'] as $r) {
+            foreach ($roles as $r) {
                 $user->assignRole($r);
             }
 
+            // Tentukan divisi berdasarkan role utama
+            $firstRole = $roles[0];
+            $divisionName = $roleToDivision[$firstRole] ?? 'Divisi Umum';
+
+            $division = Division::where('nama', $divisionName)->first();
+
+            // Jika tidak ditemukan, fallback ke divisi pertama
+            if (!$division) {
+                $division = Division::first();
+            }
+
+            // Cari atau buat posisi di divisi tersebut
+            $position = Position::where('division_id', $division->id)->first();
+            if (!$position) {
+                $position = Position::create([
+                    'division_id' => $division->id,
+                    'name' => 'Default Position',
+                    'basic_salary' => 5000000,
+                ]);
+            }
+
+            // Buat employee
             Employee::create([
                 'user_id' => $user->id,
                 'branch_id' => $branch->id,
+                'division_id' => $division->id,
                 'position_id' => $position->id,
                 'nama' => $name,
                 'nik' => 'EMP' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),

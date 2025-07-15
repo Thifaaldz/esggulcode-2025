@@ -1,54 +1,66 @@
 <x-filament::page>
-    @foreach ($assignments as $assignment)
-        @php
-            $submission = $this->getSubmission($assignment->id);
-        @endphp
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">📝 Daftar Tugas Kelas</h2>
 
-        <div class="border p-4 rounded mb-4 shadow-sm">
-            <h3 class="font-semibold">{{ $assignment->title }}</h3>
-            <p class="text-sm text-gray-600">{{ $assignment->description }}</p>
-            <p class="text-sm text-red-500 mt-1">
-                Deadline: {{ \Carbon\Carbon::parse($assignment->deadline)->format('d M Y') }}
-            </p>
+    <div class="space-y-6">
+        @foreach ($assignments as $assignment)
+            @php
+                $submission = $this->getSubmission($assignment->id);
+            @endphp
 
-            @if ($submission)
-                <div class="mt-2 text-sm text-green-600">
-                    ✅ Sudah diupload:
-                    <a href="{{ Storage::url($submission->file_path) }}" target="_blank" class="underline text-blue-600">
-                        Lihat File
-                    </a>
-                    ({{ $submission->created_at->format('d M Y H:i') }})
+            <div class="bg-white border rounded-xl shadow-sm p-6">
+                {{-- Judul & Deskripsi --}}
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">{{ $assignment->title }}</h3>
+                    <span class="text-sm text-red-600 font-medium">
+                        📅 Deadline: {{ \Carbon\Carbon::parse($assignment->deadline)->format('d M Y') }}
+                    </span>
                 </div>
-            @endif
+                <p class="mt-1 text-gray-600 text-sm">{{ $assignment->description }}</p>
 
-            <div class="mt-3">
-                <input type="file" wire:model.defer="files.{{ $assignment->id }}" />
-                <x-filament::button wire:click="submit({{ $assignment->id }})" class="mt-2">
-                    {{ $submission ? 'Update Tugas' : 'Upload Tugas' }}
-                </x-filament::button>
+                {{-- Status Upload --}}
+                @if ($submission)
+                    <div class="mt-4 bg-green-50 p-3 rounded text-sm text-green-700 border border-green-200">
+                        ✅ Tugas telah dikumpulkan:
+                        <a href="{{ Storage::url($submission->file_path) }}" target="_blank" class="underline text-blue-600">
+                            Lihat File
+                        </a>
+                        <span class="block mt-1 text-xs text-gray-500">
+                            Dikirim pada: {{ $submission->created_at->format('d M Y H:i') }}
+                        </span>
+                    </div>
+                @endif
 
-                @error("files.$assignment->id") 
-                    <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                @enderror
+                {{-- Upload Form --}}
+                <div class="mt-4 space-y-2">
+                    <input 
+                        type="file" 
+                        wire:model.defer="files.{{ $assignment->id }}" 
+                        class="block w-full text-sm text-gray-600 border border-gray-300 rounded p-2" 
+                    />
+                    
+                    <x-filament::button 
+                        wire:click="submit({{ $assignment->id }})"
+                        color="{{ $submission ? 'secondary' : 'primary' }}"
+                    >
+                        {{ $submission ? '🔁 Update Tugas' : '📤 Upload Tugas' }}
+                    </x-filament::button>
+
+                    @error("files.$assignment->id")
+                        <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
-        </div>
-    @endforeach
-
-    @php
-    $canPrint = \App\Models\AssignmentsSubmissions::where('student_id', auth()->user()->student->id)
-        ->whereBetween('assignment_id', [1, 8])
-        ->pluck('grade');
-
-    $eligible = $canPrint->count() === 8 && $canPrint->every(fn ($grade) => $grade >= 80);
-@endphp
-@if ($this->hasPassedAllAssignments())
-    <div class="p-6 mt-6 border rounded bg-green-100 text-center">
-        <h2 class="text-xl font-bold text-green-700 mb-2">Selamat! 🎉</h2>
-        <p class="mb-4">Anda telah menyelesaikan seluruh tugas dengan nilai minimal 80.</p>
-        <x-filament::button tag="a" href="{{ route('student.certificate.download') }}" target="_blank">
-            🎓 Cetak Sertifikat
-        </x-filament::button>
+        @endforeach
     </div>
-@endif
 
+    {{-- Cek Sertifikat --}}
+    @if ($this->hasPassedAllAssignments())
+        <div class="p-6 mt-10 border rounded-xl bg-gradient-to-br from-green-100 via-green-50 to-white text-center shadow-md">
+            <h2 class="text-xl font-bold text-green-700 mb-2">🎉 Selamat!</h2>
+            <p class="text-sm text-gray-700">Anda telah menyelesaikan semua tugas dengan nilai minimal 80.</p>
+            <x-filament::button tag="a" href="{{ route('student.certificate.download') }}" target="_blank" class="mt-4">
+                🎓 Unduh Sertifikat
+            </x-filament::button>
+        </div>
+    @endif
 </x-filament::page>

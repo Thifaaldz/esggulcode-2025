@@ -97,4 +97,6 @@ class AssignmentsResource extends Resource
             'edit' => Pages\EditAssignments::route('/{record}/edit'),
         ];
     }
+
+    
 }

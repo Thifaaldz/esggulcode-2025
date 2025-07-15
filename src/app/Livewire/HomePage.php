@@ -10,4 +10,6 @@ class HomePage extends Component
     {
         return view('livewire.home-page')->layout('components.layouts.app');
     }
+
+    
 }

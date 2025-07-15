@@ -2,82 +2,106 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ModuleResource\Pages;
-use App\Filament\Resources\ModuleResource\RelationManagers;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Module;
+use App\Models\EventCourse;
 use Filament\Forms;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Columns\TextColumn;
+use App\Filament\Resources\ModuleResource\Pages;
 
 class ModuleResource extends Resource
 {
     protected static ?string $model = Module::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-book-open';
-
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Manajemen Kursus';
+    protected static ?string $navigationLabel = 'Modul Kursus';
 
-    
     public static function canAccess(): bool
     {
-        return auth()->user()?->hasAnyRole(['instructor', 'super_admin']);
+        return true;
     }
-    
-    
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                    Select::make('event_course_id')
-                        ->relationship('eventCourse', 'title')
-                        ->required(),
-                    TextInput::make('meeting_number')->numeric()->required(),
-                    TextInput::make('title')->required(),
-                    Textarea::make('description'),
-                    FileUpload::make('ppt_path')
-                        ->disk('public')
-                        ->directory('modules/ppt'),
-                    TextInput::make('video_url')->url()->label('Video URL'),
-                ]);
-            
+        $employee = auth()->user()?->employee;
+
+        return $form->schema([
+            Select::make('event_course_id')
+            ->label('Event Kursus')
+            ->options(function () use ($employee) {
+                if (!$employee || !$employee->instructor) {
+                    // Jika bukan instruktur (admin misalnya), tampilkan semua
+                    return EventCourse::pluck('title', 'id');
+                }
+        
+                // Jika instruktur, hanya tampilkan event kursus yang dia ajar
+                return EventCourse::where('instructor_id', $employee->id)
+                    ->pluck('title', 'id');
+            })
+            ->required(),
+        
+
+            TextInput::make('meeting_number')
+                ->label('Pertemuan Ke-')
+                ->numeric()
+                ->required(),
+
+            TextInput::make('title')
+                ->label('Judul Modul')
+                ->required(),
+
+            Textarea::make('description')
+                ->label('Deskripsi'),
+
+            FileUpload::make('ppt_path')
+                ->label('Upload PPT')
+                ->disk('public')
+                ->directory('modules/ppt'),
+
+            TextInput::make('video_url')
+                ->label('Link Video')
+                ->url()
+                ->nullable(),
+
+            DateTimePicker::make('meeting_datetime') // ✅ Tambahan baru
+                ->label('Waktu Pertemuan')
+                ->required()
+                ->seconds(false),
+        ]);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                TextColumn::make('eventCourse.title')->label('Course'),
-                TextColumn::make('meeting_number'),
-                TextColumn::make('title'),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+        return $table->columns([
+            TextColumn::make('eventCourse.title')
+                ->label('Event Kursus')
+                ->searchable(),
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
+            TextColumn::make('meeting_number')
+                ->label('Pertemuan'),
+
+            TextColumn::make('title')
+                ->label('Judul Modul'),
+
+            TextColumn::make('meeting_datetime') // ✅ Tampilkan waktu
+                ->label('Waktu Pertemuan')
+                ->dateTime('d M Y H:i'),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\DeleteBulkAction::make(),
+        ]);
     }
 
     public static function getPages(): array
@@ -87,5 +111,21 @@ class ModuleResource extends Resource
             'create' => Pages\CreateModule::route('/create'),
             'edit' => Pages\EditModule::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $user = auth()->user();
+
+        // Hanya tampilkan modul dari kursus yang diajar oleh instruktur yang sedang login
+        if ($user->hasRole('instructor')) {
+            return parent::getEloquentQuery()
+                ->whereHas('eventCourse', function ($query) use ($user) {
+                    $query->where('instructor_id', $user->employee->id);
+                });
+        }
+
+        // Admin bisa lihat semua
+        return parent::getEloquentQuery();
     }
 }

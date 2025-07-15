@@ -5,7 +5,7 @@
     @include('livewire.components.why-us')
     @include('livewire.components.features')
     <livewire:components.courses /> 
-    @include('livewire.components.trainers')
+    <livewire:components.trainers />
     @include('livewire.components.contact')
 
 </div>

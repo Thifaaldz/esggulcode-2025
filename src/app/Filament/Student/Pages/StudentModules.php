@@ -7,6 +7,7 @@ use Filament\Pages\Page;
 
 class StudentModules extends Page
 {
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.student.pages.student-modules';
 
     public $modules;

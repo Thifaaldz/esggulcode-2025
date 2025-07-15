@@ -11,6 +11,7 @@ class Employee extends Model
         'user_id',
         'company_id',
         'branch_id',
+        'division_id',
         'position_id',
         'nama',
         'nik',
@@ -30,6 +31,20 @@ class Employee extends Model
     public function position() {
         return $this->belongsTo(Position::class);
     }
+    public function division()
+    {
+        return $this->belongsTo(Division::class);
+    }
+
+    public function eventCourses()
+{
+    return $this->hasMany(EventCourse::class, 'instructor_id');
+}
+
+public function createdModules()
+{
+    return $this->hasMany(Module::class, 'created_by');
+}
     /**
      * Get the absence records for the employee.
      */
@@ -45,10 +60,19 @@ class Employee extends Model
     {
         return $this->hasMany(PayrollDetail::class);
     }
+
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
         return $panel->getId() === 'employee';
     }
 
+    public function showTrainers()
+{
+    $trainers = Employee::whereHas('user.roles', function ($query) {
+        $query->where('name', 'instructor');
+    })->get();
+
+    return view('front.trainers', compact('trainers'));
+}
 
 }

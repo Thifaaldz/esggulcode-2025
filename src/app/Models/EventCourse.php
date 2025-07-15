@@ -14,13 +14,29 @@ class EventCourse extends Model
         'title',
         'description',
         'file_path',
+        'branch_id',
+        'instructor_id',
         'start_date',
         'end_date',
         'price',
-        'branch_id',
         'category',
         'image',
     ];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
+    public function instructor()
+    {
+        return $this->belongsTo(Employee::class, 'instructor_id');
+    }
+
+    public function modules()
+    {
+        return $this->hasMany(Module::class);
+    }
 
     public function students()
     {
@@ -33,15 +49,8 @@ class EventCourse extends Model
     return view('courses', compact('courses'));
 }
 
-public function modules()
-{
-    return $this->hasMany(Module::class);
-}
 
-public function branch()
-{
-    return $this->belongsTo(Branch::class);
-}
+
 
     // Jika kamu nanti punya model Registration terpisah, kamu bisa pakai ini:
     // public function registrations() {

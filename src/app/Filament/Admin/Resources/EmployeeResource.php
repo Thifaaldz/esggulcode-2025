@@ -3,10 +3,10 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\EmployeeResource\Pages;
+use App\Models\Position;
 use App\Models\Employee;
 use App\Models\PayrollDetail;
 use App\Models\SalaryPeriod;
-use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
@@ -27,33 +27,58 @@ class EmployeeResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('id')->required(),
-            Forms\Components\TextInput::make('nama')->required(),
-            Forms\Components\TextInput::make('nik')->required(),
-            Forms\Components\TextInput::make('telepon'),
-            Forms\Components\DatePicker::make('tanggal_lahir'),
+            Forms\Components\TextInput::make('nama')
+                ->label('Nama Lengkap')
+                ->required(),
+
+            Forms\Components\TextInput::make('nik')
+                ->label('NIK')
+                ->required(),
+
+            Forms\Components\TextInput::make('telepon')
+                ->label('Telepon'),
+
+            Forms\Components\DatePicker::make('tanggal_lahir')
+                ->label('Tanggal Lahir'),
+
             Forms\Components\Select::make('branch_id')
+                ->label('Cabang')
                 ->relationship('branch', 'nama')
-                ->required(),
-                Forms\Components\Select::make('position_id')
-                ->relationship('position', 'name')
-                ->required(),
+                ->required()
+                ->searchable(),
 
-            // Tambahan form input email & password untuk user
-Forms\Components\TextInput::make('email')
-    ->label('Email (akun login)')
-    ->email()
-    ->required()
-    ->dehydrated(false), // <- ini penting!
+            Forms\Components\Select::make('division_id')
+                ->label('Divisi')
+                ->relationship('division', 'nama')
+                ->required()
+                ->reactive()
+                ->afterStateUpdated(fn (callable $set) => $set('position_id', null)),
 
-Forms\Components\TextInput::make('password')
-    ->label('Password (akun login)')
-    ->password()
-    ->required()
-    ->default(fn () => \Str::random(8))
-    ->dehydrated(false), // <- jangan ikut disimpan ke DB
+            Forms\Components\Select::make('position_id')
+                ->label('Jabatan')
+                ->options(function ($get) {
+                    $divisionId = $get('division_id');
+                    if (!$divisionId) return [];
 
-      
+                    return Position::where('division_id', $divisionId)
+                        ->pluck('name', 'id')
+                        ->toArray();
+                })
+                ->required()
+                ->searchable(),
+
+            Forms\Components\TextInput::make('email')
+                ->label('Email (akun login)')
+                ->email()
+                ->required(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord)
+                ->visible(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord),
+
+            Forms\Components\TextInput::make('password')
+                ->label('Password (akun login)')
+                ->password()
+                ->required(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord)
+                ->default(fn () => \Str::random(8))
+                ->visible(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord),
         ]);
     }
 
@@ -61,18 +86,18 @@ Forms\Components\TextInput::make('password')
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama')->searchable(),
+                Tables\Columns\TextColumn::make('nama')->label('Nama')->searchable(),
                 Tables\Columns\TextColumn::make('nik')->label('NIK'),
-                Tables\Columns\TextColumn::make('position.name')->label('Position'),
-                Tables\Columns\TextColumn::make('branch.nama')->label('Branch'),
+                Tables\Columns\TextColumn::make('division.nama')->label('Divisi'),
+                Tables\Columns\TextColumn::make('position.name')->label('Jabatan'),
+                Tables\Columns\TextColumn::make('branch.nama')->label('Cabang'),
                 Tables\Columns\TextColumn::make('user.email')->label('Email'),
-                Tables\Columns\TextColumn::make('created_at')->dateTime(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->label('Dibuat'),
             ])
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
 
-                // Generate payroll untuk 1 karyawan
                 Action::make('generate_payroll')
                     ->label('Generate Payroll')
                     ->icon('heroicon-o-calculator')
@@ -88,7 +113,6 @@ Forms\Components\TextInput::make('password')
                             ->send();
                     }),
 
-                // Lihat gaji bersih
                 Action::make('view_salary')
                     ->label('Lihat Gaji Bersih')
                     ->icon('heroicon-o-currency-dollar')
@@ -130,7 +154,6 @@ Forms\Components\TextInput::make('password')
                 BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
 
-                    // Generate payroll untuk semua yang dipilih
                     Action::make('generatePayrollAll')
                         ->label('Generate Payroll (Semua)')
                         ->icon('heroicon-o-calculator')
@@ -147,7 +170,6 @@ Forms\Components\TextInput::make('password')
                                 ->success()
                                 ->send();
                         }),
-                    
                 ]),
             ]);
     }

@@ -16,4 +16,5 @@ class EditLeave extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
 }

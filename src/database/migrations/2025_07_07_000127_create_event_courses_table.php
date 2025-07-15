@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Branch;
+use App\Models\Employee;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,13 +18,18 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('file_path')->nullable();
-            $table->foreignIdFor(Branch::class);
+            
+            $table->foreignIdFor(Branch::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Employee::class, 'instructor_id')->constrained()->onDelete('cascade');
+            
             $table->date('start_date');
             $table->date('end_date');
             $table->integer('price')->default(0);
+
+            $table->string('category');
+            $table->string('image')->nullable();
+            
             $table->timestamps();
-            $table->string('category'); 
-            $table->string('image')->nullable(); 
         });
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Branch;
+use App\Models\Division;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Branch::class);
+            $table->foreignIdFor(Division::class);
             $table->foreignIdFor(Position::class);
         
             $table->string('nama');

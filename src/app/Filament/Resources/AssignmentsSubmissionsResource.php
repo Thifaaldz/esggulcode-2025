@@ -108,4 +108,18 @@ class AssignmentsSubmissionsResource extends Resource
             'edit' => Pages\EditAssignmentsSubmissions::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+{
+    $user = auth()->user();
+
+    if ($user->hasRole('instructor')) {
+        return parent::getEloquentQuery()
+            ->whereHas('assignment.module.eventCourse', function ($query) use ($user) {
+                $query->where('instructor_id', $user->employee->id);
+            });
+    }
+
+    return parent::getEloquentQuery();
+}
 }

@@ -59,7 +59,7 @@
         <nav class="breadcrumbs">
           <div class="container">
             <ol>
-              <li><a href="index.html">Home</a></li>
+              <li><a href="{{ route('home') }}">Home</a></li>
               <li class="current">Courses</li>
             </ol>
           </div>

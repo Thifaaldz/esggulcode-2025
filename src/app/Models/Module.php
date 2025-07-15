@@ -10,11 +10,12 @@ class Module extends Model
 
     protected $fillable = [
         'event_course_id',
+        'meeting_number',
         'title',
         'description',
         'ppt_path',
         'video_url',
-        'meeting_number',
+        'meeting_datetime',
     ];
 
     public function eventCourse()

@@ -59,7 +59,7 @@
         <nav class="breadcrumbs">
           <div class="container">
             <ol>
-              <li><a href="index.html">Home</a></li>
+              <li><a href="{{ route('home') }}">Home</a></li>
               <li class="current">Courses</li>
             </ol>
           </div>
@@ -67,7 +67,7 @@
       </div><!-- End Page Title -->
 
     @include('livewire.components.header')
-    @include('livewire.components.trainers')
+    <livewire:components.trainers />
     @include('livewire.components.footer')
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
