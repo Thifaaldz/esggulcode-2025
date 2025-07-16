@@ -10,23 +10,33 @@ class ApiKeyMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
+        // Bypass path yang bukan API (Livewire, web, dll)
         $excludedPaths = [
-            'midtrans/manual-callback', // Pastikan ini sesuai route kamu
-            'payment/finish', // Jika ingin dilepas dari validasi
+            'livewire/message/*',
+            'livewire/*',
+            'register/*',
+            'payment/finish',
+            'midtrans/*',
         ];
 
-        Log::info('Request path: ' . $request->path());
+        foreach ($excludedPaths as $path) {
+            if ($request->is($path)) {
+                Log::info("Bypass apikey middleware for: " . $request->path());
+                return $next($request);
+            }
+        }
 
-        if (in_array($request->path(), $excludedPaths)) {
+        // Hanya jalankan validasi untuk route yang diminta JSON (API)
+        if (!$request->is('api/*')) {
             return $next($request);
         }
 
         $expectedKey = env('API_KEY');
         $providedKey = $request->header('X-API-KEY');
 
-        if ($providedKey !== $expectedKey) {
-            Log::warning('Unauthorized request - Invalid API Key from IP: ' . $request->ip());
-            return response()->json(['message' => 'Unauthorized: Invalid API Key'], 401);
+        if (!$expectedKey || $providedKey !== $expectedKey) {
+            Log::warning("Unauthorized API: {$request->path()}, IP: {$request->ip()}");
+            return response()->json(['message' => 'Unauthorized: Invalid or missing API Key'], 401);
         }
 
         return $next($request);

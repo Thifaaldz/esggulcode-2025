@@ -18,7 +18,7 @@ class ModuleSeeder extends Seeder
                     'event_course_id' => $eventCourse->id,
                     'title' => "Pertemuan $i - Materi {$eventCourse->title}",
                     'meeting_number' => $i,
-                    'video_url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // dummy video
+                    'video_url' => 'https://www.youtube.com/watch?v=NBZ9Ro6UKV8&list=PLFIM0718LjIVuONHysfOK0ZtiqUWvrx4F', // dummy video
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

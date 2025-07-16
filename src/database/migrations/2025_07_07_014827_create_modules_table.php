@@ -23,8 +23,8 @@ return new class extends Migration
             $table->integer('meeting_number'); // Nomor pertemuan ke-
             $table->string('title'); // Judul modul
             $table->text('description')->nullable(); // Deskripsi modul
-            $table->string('ppt_path')->nullable(); // Path file ppt (storage)
-            $table->string('video_url')->nullable(); // URL video (YouTube/Vimeo)
+            $table->string('ppt_path')->nullable(); // file PPT upload
+            $table->string('video_url')->nullable(); // YouTube link biasa
             $table->dateTime('meeting_datetime')->nullable();
 
             $table->timestamps(); // created_at & updated_at

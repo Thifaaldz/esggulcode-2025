@@ -62,15 +62,16 @@ class ModuleResource extends Resource
             Textarea::make('description')
                 ->label('Deskripsi'),
 
-            FileUpload::make('ppt_path')
+                FileUpload::make('ppt_path')
+                ->directory('ppt')
                 ->label('Upload PPT')
-                ->disk('public')
-                ->directory('modules/ppt'),
+                ->acceptedFileTypes(['application/vnd.ms-powerpoint', 'application/vnd.openxmlformats-officedocument.presentationml.presentation'])
+                ->downloadable()
+                ->openable(),
 
             TextInput::make('video_url')
-                ->label('Link Video')
-                ->url()
-                ->nullable(),
+                ->label('Link Video YouTube'),
+            
 
             DateTimePicker::make('meeting_datetime') // ✅ Tambahan baru
                 ->label('Waktu Pertemuan')
