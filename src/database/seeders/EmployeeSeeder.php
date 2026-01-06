@@ -47,8 +47,8 @@ class EmployeeSeeder extends Seeder
         // Data karyawan
         $employees = [
             ['name' => 'Jonathan Rey Irawan', 'role' => ['instructor']],
-            ['name' => 'Muhammad Ghozy Akbar', 'role' => ['instructor']],
-            ['name' => 'Achmad Fatih Azhar', 'role' => ['hr']],
+            ['name' => 'Muhammad Ghozy Akbar', 'role' => ['hr']],
+            ['name' => 'Achmad Fatih Azhar', 'role' => ['instructor']],
             ['name' => 'Farid Muhammad Zakky', 'role' => ['content_team']],
             ['name' => 'Satria Dwi Saputra', 'role' => ['instructor']],
             ['name' => 'Kelvin Falentino', 'role' => ['tech_support']],

@@ -30,6 +30,12 @@ class AttendanceResource extends Resource
         return true;
     }
 
+       public static function canCreate(): bool
+    {
+    return Filament::getCurrentPanel()?->getId() === 'employee' ||
+           auth()->user()?->hasRole('employee');
+    }
+        
     public static function form(Form $form): Form
     {
         $components = [];
