@@ -457,9 +457,7 @@ MAIL_PASSWORD=your_password
 
 <div align="center">
 
-**Dibuat dengan ❤️ oleh EsgulCode Team**
-
-*© 2025 EsgulCode Company - All Rights Reserved*
+**Dibuat oleh Muhammad Thifaal Dzaki**
 
 **Tech Stack: Laravel 12 • Filament v3 • Docker • MariaDB**
 
